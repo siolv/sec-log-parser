@@ -1,0 +1,35 @@
+Nov 17 08:00:01 web01 sshd[812]: Server listening on 0.0.0.0 port 22.
+Nov 17 08:00:01 web01 sshd[812]: Server listening on :: port 22.
+Nov 17 13:58:02 web01 sshd[2411]: Accepted publickey for deploy from 198.51.100.23 port 51412 ssh2
+Nov 17 14:05:41 web01 sshd[2466]: Accepted publickey for deploy from 198.51.100.23 port 51502 ssh2
+Nov 17 14:06:03 web01 sudo: pam_unix(sudo:auth): authentication failure; logname=deploy uid=1000 euid=0 tty=/dev/pts/0 ruser=deploy rhost=  user=deploy
+Nov 17 14:06:19 web01 sshd[2466]: Accepted publickey for deploy from 198.51.100.23 port 51510 ssh2
+Nov 17 14:33:52 web01 sshd[2588]: Failed password for invalid user test from 198.51.100.23 port 51730 ssh2
+Nov 17 14:34:11 web01 sshd[2588]: Accepted publickey for deploy from 198.51.100.23 port 51734 ssh2
+Nov 17 15:02:37 web01 sshd[2711]: Accepted publickey for deploy from 198.51.100.23 port 51988 ssh2
+Nov 17 15:47:23 web01 sshd[2902]: Failed password for admin from 192.0.2.201 port 44112 ssh2
+Nov 17 15:47:41 web01 sshd[2902]: Failed password for admin from 192.0.2.201 port 44118 ssh2
+Nov 17 15:48:02 web01 sshd[2915]: Failed password for admin from 192.0.2.202 port 58120 ssh2
+Nov 17 15:48:18 web01 sshd[2915]: Failed password for admin from 192.0.2.202 port 58126 ssh2
+Nov 17 15:48:51 web01 sshd[2929]: Failed password for invalid user admin from 192.0.2.203 port 40222 ssh2
+Nov 17 15:49:07 web01 sshd[2929]: Failed password for admin from 192.0.2.203 port 40230 ssh2
+Nov 17 18:12:09 web01 sshd[3201]: Accepted publickey for deploy from 198.51.100.23 port 52110 ssh2
+Nov 17 21:40:55 web01 sshd[3488]: Accepted publickey for deploy from 198.51.100.23 port 52344 ssh2
+Nov 17 21:41:12 web01 sudo: pam_unix(sudo:auth): authentication failure; logname=deploy uid=1000 euid=0 tty=/dev/pts/1 ruser=deploy rhost=  user=deploy
+Nov 17 21:41:30 web01 sshd[3488]: Accepted publickey for deploy from 198.51.100.23 port 52350 ssh2
+Nov 17 22:14:08 web01 sshd[3901]: Failed password for root from 203.0.113.42 port 44210 ssh2
+Nov 17 22:14:52 web01 sshd[3901]: Failed password for root from 203.0.113.42 port 44216 ssh2
+Nov 17 22:15:33 web01 sshd[3915]: Failed password for admin from 203.0.113.42 port 44230 ssh2
+Nov 17 22:16:10 web01 sshd[3915]: Failed password for invalid user oracle from 203.0.113.42 port 44244 ssh2
+Nov 17 22:16:44 web01 sshd[3922]: Failed password for postgres from 203.0.113.42 port 44256 ssh2
+Nov 17 22:17:20 web01 sshd[3922]: Failed password for test from 203.0.113.42 port 44268 ssh2
+Nov 17 22:18:02 web01 sshd[3930]: Failed password for ubuntu from 203.0.113.42 port 44280 ssh2
+Nov 17 22:18:47 web01 sshd[3930]: Failed password for deploy from 203.0.113.42 port 44292 ssh2
+Nov 17 22:19:31 web01 sshd[3941]: Failed password for root from 203.0.113.42 port 44304 ssh2
+Nov 17 22:19:58 web01 sshd[3941]: error: maximum authentication attempts exceeded for root from 203.0.113.42 port 44304 ssh2 [preauth]
+Nov 17 22:21:44 web01 sshd[3960]: Accepted password for svc-backup from 203.0.113.42 port 44322 ssh2
+Nov 17 23:37:12 web01 systemd-logind[812]: New session 421 of user deploy.
+Nov 18 02:14:37 web01 sshd[4402]: Accepted password for deploy from 203.0.113.42 port 45102 ssh2
+Nov 18 02:16:05 web01 sudo: pam_unix(sudo:auth): authentication failure; logname=deploy uid=1000 euid=0 tty=/dev/pts/2 ruser=deploy rhost=  user=deploy
+Nov 18 02:16:31 web01 sshd[4402]: Received disconnect from 203.0.113.42 port 45102:11: disconnected by user
+Nov 18 02:16:31 web01 sshd[4402]: Disconnected from user deploy 203.0.113.42 port 45102

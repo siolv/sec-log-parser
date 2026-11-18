@@ -1,0 +1,282 @@
+{
+  "generated_at": "2026-11-18T17:12:14+08:00",
+  "inputs": [
+    "sample_auth.log",
+    "sample_access.log"
+  ],
+  "model": "qwen3.5:9b",
+  "config": {
+    "window_minutes": 5,
+    "auth_failure_threshold": 5,
+    "web_login_threshold": 5,
+    "spray_min_ips": 3,
+    "spray_window_minutes": 10,
+    "success_after_failure_threshold": 3,
+    "success_lookback_minutes": 15,
+    "recon_404_threshold": 10,
+    "off_hours_start": 0,
+    "off_hours_end": 6
+  },
+  "statistics": {
+    "inputs": [
+      "sample_auth.log",
+      "sample_access.log"
+    ],
+    "total_events": 82,
+    "auth_events": 29,
+    "web_events": 53,
+    "auth_failures": 19,
+    "web_failures": 32,
+    "web_404s": 14,
+    "unique_source_ips": 12,
+    "first_event": "2026-11-17T08:02:14+08:00",
+    "last_event": "2026-11-18T02:16:05+08:00",
+    "ignored_lines": 6,
+    "unparsed_lines": 0,
+    "top_talkers": [
+      {
+        "ip": "203.0.113.42",
+        "events": 18
+      },
+      {
+        "ip": "192.0.2.77",
+        "events": 12
+      },
+      {
+        "ip": "198.51.100.88",
+        "events": 9
+      },
+      {
+        "ip": "198.51.100.66",
+        "events": 9
+      },
+      {
+        "ip": "198.51.100.23",
+        "events": 9
+      }
+    ]
+  },
+  "ip_summary": [
+    {
+      "ip": "203.0.113.42",
+      "score": 100,
+      "rules": [
+        "auth_brute_force",
+        "compromise_success",
+        "off_hours_privileged_login",
+        "web_login_bruteforce"
+      ],
+      "findings": 4,
+      "risk": "CRITICAL"
+    },
+    {
+      "ip": "192.0.2.77",
+      "score": 45,
+      "rules": [
+        "web_recon"
+      ],
+      "findings": 1,
+      "risk": "HIGH"
+    },
+    {
+      "ip": "198.51.100.66",
+      "score": 45,
+      "rules": [
+        "web_login_bruteforce"
+      ],
+      "findings": 1,
+      "risk": "HIGH"
+    },
+    {
+      "ip": "192.0.2.201",
+      "score": 35,
+      "rules": [
+        "password_spray"
+      ],
+      "findings": 1,
+      "risk": "MEDIUM"
+    },
+    {
+      "ip": "192.0.2.202",
+      "score": 35,
+      "rules": [
+        "password_spray"
+      ],
+      "findings": 1,
+      "risk": "MEDIUM"
+    },
+    {
+      "ip": "192.0.2.203",
+      "score": 35,
+      "rules": [
+        "password_spray"
+      ],
+      "findings": 1,
+      "risk": "MEDIUM"
+    }
+  ],
+  "findings": [
+    {
+      "rule": "compromise_success",
+      "title": "Possible compromise: svc-backup logged in from 203.0.113.42 after 9 failures",
+      "severity": "Critical",
+      "source_ips": [
+        "203.0.113.42"
+      ],
+      "users": [
+        "admin",
+        "deploy",
+        "oracle",
+        "postgres",
+        "root",
+        "svc-backup",
+        "test",
+        "ubuntu"
+      ],
+      "event_count": 10,
+      "first_seen": "2026-11-17T22:14:08+08:00",
+      "last_seen": "2026-11-17T22:21:44+08:00",
+      "description": "203.0.113.42 failed 9 times in the 15 minutes before a successful login as 'svc-backup'. Either the password was guessed or valid credentials were used from an untrusted address.",
+      "evidence": [
+        "Nov 17 22:18:02 web01 sshd[3930]: Failed password for ubuntu from 203.0.113.42 port 44280 ssh2",
+        "Nov 17 22:18:47 web01 sshd[3930]: Failed password for deploy from 203.0.113.42 port 44292 ssh2",
+        "Nov 17 22:19:31 web01 sshd[3941]: Failed password for root from 203.0.113.42 port 44304 ssh2",
+        "Nov 17 22:21:44 web01 sshd[3960]: Accepted password for svc-backup from 203.0.113.42 port 44322 ssh2"
+      ]
+    },
+    {
+      "rule": "web_recon",
+      "title": "Web scanning: 10 HTTP 404s within 5 minutes and 12 probes for sensitive paths",
+      "severity": "High",
+      "source_ips": [
+        "192.0.2.77"
+      ],
+      "users": [],
+      "event_count": 12,
+      "first_seen": "2026-11-17T11:20:04+08:00",
+      "last_seen": "2026-11-17T11:24:39+08:00",
+      "description": "Directory/exploit scanning from 192.0.2.77: 10 HTTP 404s within 5 minutes and 12 probes for sensitive paths. Probes include /.env, /.git/config, /actuator/env, /admin, /api/v1/users, /cgi-bin/luci.",
+      "evidence": [
+        "192.0.2.77 - - [17/Nov/2026:11:20:04 +0800] \"GET /.env HTTP/1.1\" 404 162 \"-\" \"Mozilla/5.0 (compatible; Nmap Scripting Engine; https://nmap.org/book/nse.html)\"",
+        "192.0.2.77 - - [17/Nov/2026:11:20:31 +0800] \"GET /.git/config HTTP/1.1\" 404 162 \"-\" \"Mozilla/5.0 (compatible; Nmap Scripting Engine; https://nmap.org/book/nse.html)\"",
+        "192.0.2.77 - - [17/Nov/2026:11:21:02 +0800] \"GET /wp-login.php HTTP/1.1\" 404 162 \"-\" \"Mozilla/5.0 (compatible; Nmap Scripting Engine; https://nmap.org/book/nse.html)\"",
+        "192.0.2.77 - - [17/Nov/2026:11:21:18 +0800] \"GET /wp-admin/ HTTP/1.1\" 404 162 \"-\" \"Mozilla/5.0 (compatible; Nmap Scripting Engine; https://nmap.org/book/nse.html)\"",
+        "192.0.2.77 - - [17/Nov/2026:11:21:44 +0800] \"GET /phpmyadmin/ HTTP/1.1\" 404 162 \"-\" \"Mozilla/5.0 (compatible; Nmap Scripting Engine; https://nmap.org/book/nse.html)\""
+      ]
+    },
+    {
+      "rule": "web_login_bruteforce",
+      "title": "Web login brute force: 9 rejected attempts",
+      "severity": "High",
+      "source_ips": [
+        "198.51.100.66"
+      ],
+      "users": [],
+      "event_count": 9,
+      "first_seen": "2026-11-17T09:41:02+08:00",
+      "last_seen": "2026-11-17T09:42:34+08:00",
+      "description": "9 authentication requests from 198.51.100.66 were rejected by the web login endpoint in 5 minutes, using user agent(s): python-requests/2.31.0.",
+      "evidence": [
+        "198.51.100.66 - - [17/Nov/2026:09:41:02 +0800] \"POST /login HTTP/1.1\" 401 41 \"https://portal.example.com/login\" \"python-requests/2.31.0\"",
+        "198.51.100.66 - - [17/Nov/2026:09:41:11 +0800] \"POST /login HTTP/1.1\" 401 41 \"https://portal.example.com/login\" \"python-requests/2.31.0\"",
+        "198.51.100.66 - - [17/Nov/2026:09:41:19 +0800] \"POST /login HTTP/1.1\" 401 41 \"https://portal.example.com/login\" \"python-requests/2.31.0\"",
+        "198.51.100.66 - - [17/Nov/2026:09:41:30 +0800] \"POST /login HTTP/1.1\" 401 41 \"https://portal.example.com/login\" \"python-requests/2.31.0\"",
+        "198.51.100.66 - - [17/Nov/2026:09:41:44 +0800] \"POST /login HTTP/1.1\" 401 41 \"https://portal.example.com/login\" \"python-requests/2.31.0\""
+      ]
+    },
+    {
+      "rule": "auth_brute_force",
+      "title": "SSH brute force: 8 failures in 5 min",
+      "severity": "High",
+      "source_ips": [
+        "203.0.113.42"
+      ],
+      "users": [
+        "admin",
+        "deploy",
+        "oracle",
+        "postgres",
+        "root",
+        "test",
+        "ubuntu"
+      ],
+      "event_count": 8,
+      "first_seen": "2026-11-17T22:14:08+08:00",
+      "last_seen": "2026-11-17T22:18:47+08:00",
+      "description": "8 failed SSH authentications from 203.0.113.42 against 7 username(s) (admin, deploy, oracle, postgres, root, test, ubuntu) within 5 minutes.",
+      "evidence": [
+        "Nov 17 22:14:08 web01 sshd[3901]: Failed password for root from 203.0.113.42 port 44210 ssh2",
+        "Nov 17 22:14:52 web01 sshd[3901]: Failed password for root from 203.0.113.42 port 44216 ssh2",
+        "Nov 17 22:15:33 web01 sshd[3915]: Failed password for admin from 203.0.113.42 port 44230 ssh2",
+        "Nov 17 22:16:10 web01 sshd[3915]: Failed password for invalid user oracle from 203.0.113.42 port 44244 ssh2",
+        "Nov 17 22:16:44 web01 sshd[3922]: Failed password for postgres from 203.0.113.42 port 44256 ssh2"
+      ]
+    },
+    {
+      "rule": "password_spray",
+      "title": "Password spray: user 'admin' from 3 IPs",
+      "severity": "High",
+      "source_ips": [
+        "192.0.2.201",
+        "192.0.2.202",
+        "192.0.2.203"
+      ],
+      "users": [
+        "admin"
+      ],
+      "event_count": 6,
+      "first_seen": "2026-11-17T15:47:23+08:00",
+      "last_seen": "2026-11-17T15:49:07+08:00",
+      "description": "Account 'admin' was targeted from 3 distinct source IPs (192.0.2.201, 192.0.2.202, 192.0.2.203) within 10 minutes, a distributed spray pattern rather than a single-source brute force.",
+      "evidence": [
+        "Nov 17 15:47:23 web01 sshd[2902]: Failed password for admin from 192.0.2.201 port 44112 ssh2",
+        "Nov 17 15:47:41 web01 sshd[2902]: Failed password for admin from 192.0.2.201 port 44118 ssh2",
+        "Nov 17 15:48:02 web01 sshd[2915]: Failed password for admin from 192.0.2.202 port 58120 ssh2",
+        "Nov 17 15:48:18 web01 sshd[2915]: Failed password for admin from 192.0.2.202 port 58126 ssh2",
+        "Nov 17 15:48:51 web01 sshd[2929]: Failed password for invalid user admin from 192.0.2.203 port 40222 ssh2"
+      ]
+    },
+    {
+      "rule": "web_login_bruteforce",
+      "title": "Web login brute force: 6 rejected attempts",
+      "severity": "High",
+      "source_ips": [
+        "203.0.113.42"
+      ],
+      "users": [],
+      "event_count": 6,
+      "first_seen": "2026-11-17T22:05:10+08:00",
+      "last_seen": "2026-11-17T22:08:44+08:00",
+      "description": "6 authentication requests from 203.0.113.42 were rejected by the web login endpoint in 5 minutes, using user agent(s): curl/8.4.0.",
+      "evidence": [
+        "203.0.113.42 - - [17/Nov/2026:22:05:10 +0800] \"POST /login HTTP/1.1\" 401 41 \"https://portal.example.com/login\" \"curl/8.4.0\"",
+        "203.0.113.42 - - [17/Nov/2026:22:05:52 +0800] \"POST /login HTTP/1.1\" 401 41 \"https://portal.example.com/login\" \"curl/8.4.0\"",
+        "203.0.113.42 - - [17/Nov/2026:22:06:31 +0800] \"POST /login HTTP/1.1\" 401 41 \"https://portal.example.com/login\" \"curl/8.4.0\"",
+        "203.0.113.42 - - [17/Nov/2026:22:07:09 +0800] \"POST /login HTTP/1.1\" 401 41 \"https://portal.example.com/login\" \"curl/8.4.0\"",
+        "203.0.113.42 - - [17/Nov/2026:22:07:58 +0800] \"POST /login HTTP/1.1\" 401 41 \"https://portal.example.com/login\" \"curl/8.4.0\""
+      ]
+    },
+    {
+      "rule": "off_hours_privileged_login",
+      "title": "Off-hours login: deploy from 203.0.113.42",
+      "severity": "Medium",
+      "source_ips": [
+        "203.0.113.42"
+      ],
+      "users": [
+        "deploy"
+      ],
+      "event_count": 1,
+      "first_seen": "2026-11-18T02:14:37+08:00",
+      "last_seen": "2026-11-18T02:14:37+08:00",
+      "description": "Privileged account 'deploy' authenticated from 203.0.113.42 at 2026-11-18T02:14:37+08:00 (local time), inside the 00:00-06:00 quiet window. Confirm whether change management approved it.",
+      "evidence": [
+        "Nov 18 02:14:37 web01 sshd[4402]: Accepted password for deploy from 203.0.113.42 port 45102 ssh2"
+      ]
+    }
+  ],
+  "ai": {
+    "used": true,
+    "error": null
+  }
+}
