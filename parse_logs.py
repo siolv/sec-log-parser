@@ -29,6 +29,8 @@ from dataclasses import dataclass, field, replace
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
+from grounding import check_narrative, render_warning
+
 # ---------------------------------------------------------------------------
 # Configuration
 # ---------------------------------------------------------------------------
@@ -901,6 +903,8 @@ def render_report(
 
     lines += ["", "## 4. Triage Narrative", ""]
     if narrative:
+        grounding = check_narrative(narrative, findings)
+        lines += render_warning(grounding)
         lines.append(narrative)
     else:
         lines += [

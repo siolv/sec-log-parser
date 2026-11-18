@@ -58,6 +58,40 @@ From `report.md` on the bundled sample:
 
 The model's narrative turns those rows into an attack chain, a MITRE ATT&CK table, containment steps and detection gaps. It is told to use only supplied evidence and to say "not established from the available logs" when the data cannot support a claim.
 
+## Tests
+
+Standard library only, no install needed:
+
+```bash
+python -m unittest discover -s tests -v
+```
+
+32 tests pin the behaviour the README promises:
+
+| Group | What it locks down |
+| --- | --- |
+| `ParserTests` | both formats produce `Event`s, timestamps stay timezone-aware, junk lines don't crash |
+| `RuleTests` | each of the six detectors fires on its planted scenario |
+| `NoiseTests` | normal traffic is *not* flagged, and threshold overrides take effect |
+| `ScoringTests` | weights are stable, scores cap at 100, every finding carries evidence |
+| `PromptTests` | only findings reach the model, and the anti-invention rules are present |
+| `NarrativeSafetyTests` | model text never becomes data in `findings.json` |
+| `GroundingTests` | invented addresses in the narrative are caught |
+| `CliTests` | end-to-end run writes both files and exits 0 |
+
+CI runs the suite on Python 3.10, 3.11 and 3.12 plus a real CLI invocation on every push.
+
+## Narrative grounding check
+
+The model can write prose; it cannot create a finding. That separation keeps the data clean, but a human reading `report.md` could still be misled by an invented IP.
+
+`grounding.py` closes that gap. After the model responds, every address in the narrative is compared against the addresses in the findings. Anything that appears in prose but not in evidence triggers a warning block above the narrative:
+
+> [!warning] Narrative grounding check
+> Narrative mentions address(es) not present in the findings: `45.33.12.9`. Treat these as model-generated text, not evidence.
+
+Loopback and private ranges are ignored so ordinary prose doesn't trip it. The JSON is never affected — it is built from `Finding` objects and never parses model output.
+
 ## Detection rules
 
 | Rule | Signal | Default trigger | Weight |
@@ -134,6 +168,7 @@ sec-log-parser/
 ## Limitations
 
 - Single-file, batch mode. No tailing, no persistence, no state between runs.
+- Grounding check compares narrative IPs only; invented usernames or timestamps in prose are not yet cross-checked.
 - Regex parsers target classic syslog and nginx/Apache combined format. JSON logs, Windows Event Log and cloud trails need adapters.
 - No geolocation, threat-intel enrichment, or baseline learning. A successful login is flagged only when it follows failures or happens off-hours for a privileged account.
 - `svc-backup` is treated as privileged by name, not by directory lookup. Real deployments should resolve privilege from IAM.
@@ -145,7 +180,7 @@ sec-log-parser/
 - YAML rule config and per-rule severity overrides.
 - `--follow` mode with in-memory state and webhook alerts.
 - Optional STIX/CSV export and ATT&CK coverage summary.
-- Dockerfile and a GitHub Actions test job for the parsers.
+- Dockerfile and packaging as a single binary.
 
 ## Safety
 
