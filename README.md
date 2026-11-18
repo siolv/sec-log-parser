@@ -1,7 +1,13 @@
 # AI-Assisted Security Log Analyzer
 
+[![tests](https://github.com/siolv/sec-log-parser/actions/workflows/tests.yml/badge.svg)](https://github.com/siolv/sec-log-parser/actions/workflows/tests.yml)
+
 Rule-based log triage in Python, with the incident narrative written by a **local** LLM.
 No cloud APIs, no API keys, no per-token bill. Runs on one machine and the logs never leave it.
+
+![Suspicious IP ranking](docs/03-ip-ranking.png)
+
+Six source IPs flagged from a synthetic sample: one at 100/100 after four independent rules fired, five at high or medium. Scores rank attention, not certainty.
 
 ```
 sample_auth.log   ─┐
@@ -46,6 +52,10 @@ python parse_logs.py sample_auth.log sample_access.log --no-ai
 ## Example output
 
 From `report.md` on the bundled sample:
+
+![Detection summary](docs/01-detection-summary.png)
+
+![Findings at a glance](docs/02-findings-at-a-glance.png)
 
 | Risk | Score | Source IP | Rules triggered |
 | --- | --- | --- | --- |
@@ -144,6 +154,12 @@ python parse_logs.py LOG [LOG ...] [options]
 - The prompt forbids invented IPs, users, CVEs and timestamps, and requires an explicit "not established" when evidence is thin.
 - Temperature 0.2, `think: false`, 4k context, 900 output-token cap. Qwen 9B on CPU is slow (roughly 4 tokens/s here); the default timeout is 600 seconds. Use `--no-ai` while iterating on rules.
 - If Ollama is down, the report still renders and says why the narrative is missing.
+
+What the model produces, from the bundled sample:
+
+![Triage narrative](docs/04-triage-narrative.png)
+
+![MITRE ATT&CK mapping](docs/05-mitre-attack.png)
 
 ## Project layout
 
